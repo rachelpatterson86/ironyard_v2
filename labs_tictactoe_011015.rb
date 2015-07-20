@@ -1,7 +1,9 @@
 require 'pry'
 
 $game_options = {"1" => "Human v. Human", "2" => "Human v. Computer(Easy)", "3" => "Human v. Computer(Hard)"}
-$grid = {"A1" => " ","A2" => " ","A3" => " ","B1" => " ","B2" => " ","B3" => " ","C1" => " ","C2" => " ","C3" => " "}
+# change $grid (SPACES) from hash to array. The data set is small so using hashes adds un-needed complexity.
+#$grid = {"A1" => " ","A2" => " ","A3" => " ","B1" => " ","B2" => " ","B3" => " ","C1" => " ","C2" => " ","C3" => " "}
+@spaces = 1.upto(9).to_a
 $game_mode
 $turn
 
@@ -38,22 +40,29 @@ def print_rules
   puts "For example, A1 = top left square, C3 = bottom right."
 end
 
-def get_grid_template
-   grid_template = "  1 | 2 | 3 \n"
-   grid_template += "------------\n"
-   grid_template += "A A1 | A2 | A3 \n"
-   grid_template += "____________\n"
-   grid_template += "B B1 | B2 | B3 \n"
-   grid_template += "____________\n"
-   grid_template += "C C1 | C2 | C3 \n"
-   return grid_template
+def get_board
+  grid_h =  "---+---+---\n"
+  @spaces.each_slice(3) do |row|
+    puts ' ' + row.join(' | ')
+    if row != @spaces.last(3)
+      puts grid_h
+    end
+  end
+
+# output
+#    1 | 2 | 3
+#   ---+---+---
+#    4 | 5 | 6
+#   ---+---+---
+#    7 | 8 | 9
+
+
 
  end
 
  def print_played_grid
- grid_template = get_grid_template
-#puts "$grid = {#$grid}"
- $grid.each do |key, value|
+ grid_template = get_board
+ SPACES.each do |value|
        grid_template[key] = value
    end
 
