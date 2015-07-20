@@ -4,6 +4,7 @@ require 'pry'
 # change $grid (SPACES) from hash to array. The data set is small so using hashes adds un-needed complexity.
 #$grid = {"A1" => " ","A2" => " ","A3" => " ","B1" => " ","B2" => " ","B3" => " ","C1" => " ","C2" => " ","C3" => " "}
 @spaces = 1.upto(9).to_a
+@win = [[1,2,3],[4,5,6],[7,8,9],[1,4,7],[2,5,8],[3,6,9],[1,5,9],[3,5,7]]
 @game_mode
 @turn
 
@@ -56,17 +57,6 @@ def get_board
 #   ---+---+---
 #    7 | 8 | 9
 
-
-
- end
-
- def print_played_grid
- grid_template = get_board
- SPACES.each do |value|
-       grid_template[key] = value
-   end
-
-puts grid_template
  end
 
  def game_over?
@@ -77,76 +67,13 @@ puts grid_template
   end
 
  def gameboard_full?
-   unless @grid.has_value?(" ")
+   unless @spaces.has_value?(" ")
    return true
   end
    return false
  end
 
- def horizontal_win?
-   if player_horizontal_win?('X') || player_horizontal_win?('O')
-     return true
-   else
-     return false
-   end
- end
-
- def vertical_win?
-   if player_vertical_win?('X') || player_vertical_win?('O')
-     return true
-   else
-     return false
-   end
- end
-
- def diagonal_win?
-   if player_diagonal_win?('X') || player_diagonal_win?('O')
-     return true
-   else
-     return false
-   end
- end
-
- def player_horizontal_win?(player)
-   if @grid['A1'] == player && @grid['A2'] == player && @grid['A3'] == player
-     return true
-   elsif @grid['B1'] == player && @grid['B2'] == player && @grid['B3'] == player
-     return true
-   elsif @grid['C1'] == player && @grid['C2'] == player && @grid['C3'] == player
-     return true
-   end
-   return false
- end
-
- def player_vertical_win?(player)
-   if @grid['A1'] == player && @grid['B1'] == player && @grid['C1'] == player
-     return true
-   elsif @grid['A2'] == player && @grid['B2'] == player && @grid['C2'] == player
-     return true
-   elsif @grid['A3'] == player && @grid['B3'] == player && @grid['C3'] == player
-     return true
-   end
-   return false
- end
-
- def player_diagonal_win?(player)
-   if @grid['A1'] == player && @grid['B2'] == player && @grid['C3'] == player
-     return true
-   elsif @grid['C1'] == player && @grid['B2'] == player && @grid['A3'] == player
-     return true
-   end
-   return false
- end
-
 def player_win?(player)
-  if player_horizontal_win?(player)
-    return true
-  elsif player_vertical_win?(player)
-    return true
-  elsif player_diagonal_win?(player)
-    return true
-  end
-  return false
 end
 
  def get_player_move(is_player_1)
@@ -172,15 +99,15 @@ elsif player_move == 'C1' || player_move == 'C2' || player_move == 'C3'
 
 def is_move_already_played?(player_move)
  #is this space already taken by another player?
- if @grid[player_move] == " "
+ if @spaces[player_move] == " "
  return false
  end
  return true
 end
 
  def set_player_move(player_move, player)
- if @grid[player_move] == " "
-     @grid[player_move] = player
+ if @spaces[player_move] == " "
+     @spaces[player_move] = player
    else
      puts "There is already a play in square #{player_move}. #{player} loses a turn."
    end
@@ -191,7 +118,7 @@ def play_game_mode_1
   player_1_turn = true
 
   until game_over?
-    print_played_grid
+    get_board
     player_move = get_player_move(player_1_turn)
     set_player_move(player_move, (player_1_turn ? 'X' : 'O'))
     if player_1_turn
@@ -201,7 +128,7 @@ def play_game_mode_1
     end #end if
   end#end until
 
-  print_played_grid
+  get_board
 
   if player_win?('X')
     puts "Player 1 wins!"
@@ -218,7 +145,7 @@ def play_game_mode_2
   human_turn = true
 
   until game_over?
-    print_played_grid
+    get_board
     if human_turn
       player_move = get_player_move(human_turn)
       set_player_move(player_move, 'X')
@@ -234,7 +161,7 @@ def play_game_mode_2
     end #end if
   end #end until
 
-  print_played_grid
+  get_board
 
   if player_win?('X')
     puts "Human wins! (Of course)"
@@ -250,7 +177,7 @@ end
 
   def generate_dumb_computer_move
     #play the first available space
-    @grid.each do |key, value|
+    @spaces.each do |key, value|
       if value == " "
         return key
       end
