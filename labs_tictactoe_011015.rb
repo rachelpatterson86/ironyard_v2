@@ -1,8 +1,6 @@
 require 'pry'
 
 @game_options = {"1" => "Human v. Human", "2" => "Human v. Computer(Easy)", "3" => "Human v. Computer(Hard)"}
-# change $grid (SPACES) from hash to array. The data set is small so using hashes adds un-needed complexity.
-#$grid = {"A1" => " ","A2" => " ","A3" => " ","B1" => " ","B2" => " ","B3" => " ","C1" => " ","C2" => " ","C3" => " "}
 @spaces = 1.upto(9).to_a
 @win = [[1,2,3],[4,5,6],[7,8,9],[1,4,7],[2,5,8],[3,6,9],[1,5,9],[3,5,7]]
 @game_mode
@@ -16,29 +14,32 @@ def get_game_mode
   puts "What Tic Tac Toe game would you like to play? Select 1, 2 or 3"
   @game_options.each do |opt, msg|
     puts "#{opt} is #{msg}"
-  endcmd
+  end
   user_input = gets.chomp
 
   until @game_options.has_key?(user_input)
     puts "#{user_input} is not an option. Please select 1, 2, or 3."
     user_input = gets.chomp
   end
+
   puts "You've selected #{@game_options[user_input]} mode! Let's get started."
 
 end
 
-def print_rules
-
-  if @game_mode == 1
-    puts "Player 1, you're X"
-    puts "Player 2, you're O"
-  elsif @game_mode == 2
-    puts "Human, you're X"
-  else
-    puts "Human, you're O"
+def select_xo
+  puts "Select your character: 'X' or 'O'?"
+  user_input = gets.chomp
+  until player1 == /^[xo]$/i
+    puts "#{user_input} is not an option. Please select 'X' or 'O'."
+    user_input = gets.chomp
   end
-  puts "Make your selection by letter and number."
-  puts "For example, A1 = top left square, C3 = bottom right."
+  player1 = user_input.upcase
+  if player1 == "X" ? player2 = "O" : "X" end
+  puts "You are '#{player1}'. Your oppenent is '#{player2}'."
+end
+
+def print_rules
+  puts "To play, select any number for where you would like your piece to go. \n Let's begin!\n"
 end
 
 def get_board
@@ -77,9 +78,9 @@ def player_win?(player)
 end
 
  def get_player_move(is_player_1)
- puts "Make your move, " + (is_player_1 ? "player 1." : "player 2.")
- player_move = gets.chomp
- until is_valid_move?(player_move) && ! is_move_already_played?(player_move)
+ #puts "Make your move!" + (is_player_1 ? "player 1." : "player 2.")
+ player_move = gets.chomp.to_i
+ until is_valid_move?(player_move) # && ! is_move_already_played?(player_move)
  puts "#{player_move} is not a valid option. Try again."
  player_move = gets.chomp
  end
