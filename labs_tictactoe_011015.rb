@@ -1,11 +1,11 @@
 require 'pry'
 
-$game_options = {"1" => "Human v. Human", "2" => "Human v. Computer(Easy)", "3" => "Human v. Computer(Hard)"}
+@game_options = {"1" => "Human v. Human", "2" => "Human v. Computer(Easy)", "3" => "Human v. Computer(Hard)"}
 # change $grid (SPACES) from hash to array. The data set is small so using hashes adds un-needed complexity.
 #$grid = {"A1" => " ","A2" => " ","A3" => " ","B1" => " ","B2" => " ","B3" => " ","C1" => " ","C2" => " ","C3" => " "}
 @spaces = 1.upto(9).to_a
-$game_mode
-$turn
+@game_mode
+@turn
 
 def greeting
   puts "Welcome to Tic Tac Toe: The all American game!"
@@ -13,25 +13,25 @@ end
 
 def get_game_mode
   puts "What Tic Tac Toe game would you like to play? Select 1, 2 or 3"
-  $game_options.each do |opt, msg|
+  @game_options.each do |opt, msg|
     puts "#{opt} is #{msg}"
-  end
+  endcmd
   user_input = gets.chomp
 
-  until $game_options.has_key?(user_input)
+  until @game_options.has_key?(user_input)
     puts "#{user_input} is not an option. Please select 1, 2, or 3."
     user_input = gets.chomp
   end
-  puts "You've selected #{$game_options[user_input]} mode! Let's get started."
+  puts "You've selected #{@game_options[user_input]} mode! Let's get started."
 
 end
 
 def print_rules
 
-  if $game_mode == 1
+  if @game_mode == 1
     puts "Player 1, you're X"
     puts "Player 2, you're O"
-  elsif $game_mode == 2
+  elsif @game_mode == 2
     puts "Human, you're X"
   else
     puts "Human, you're O"
@@ -77,7 +77,7 @@ puts grid_template
   end
 
  def gameboard_full?
-   unless $grid.has_value?(" ")
+   unless @grid.has_value?(" ")
    return true
   end
    return false
@@ -108,31 +108,31 @@ puts grid_template
  end
 
  def player_horizontal_win?(player)
-   if $grid['A1'] == player && $grid['A2'] == player && $grid['A3'] == player
+   if @grid['A1'] == player && @grid['A2'] == player && @grid['A3'] == player
      return true
-   elsif $grid['B1'] == player && $grid['B2'] == player && $grid['B3'] == player
+   elsif @grid['B1'] == player && @grid['B2'] == player && @grid['B3'] == player
      return true
-   elsif $grid['C1'] == player && $grid['C2'] == player && $grid['C3'] == player
+   elsif @grid['C1'] == player && @grid['C2'] == player && @grid['C3'] == player
      return true
    end
    return false
  end
 
  def player_vertical_win?(player)
-   if $grid['A1'] == player && $grid['B1'] == player && $grid['C1'] == player
+   if @grid['A1'] == player && @grid['B1'] == player && @grid['C1'] == player
      return true
-   elsif $grid['A2'] == player && $grid['B2'] == player && $grid['C2'] == player
+   elsif @grid['A2'] == player && @grid['B2'] == player && @grid['C2'] == player
      return true
-   elsif $grid['A3'] == player && $grid['B3'] == player && $grid['C3'] == player
+   elsif @grid['A3'] == player && @grid['B3'] == player && @grid['C3'] == player
      return true
    end
    return false
  end
 
  def player_diagonal_win?(player)
-   if $grid['A1'] == player && $grid['B2'] == player && $grid['C3'] == player
+   if @grid['A1'] == player && @grid['B2'] == player && @grid['C3'] == player
      return true
-   elsif $grid['C1'] == player && $grid['B2'] == player && $grid['A3'] == player
+   elsif @grid['C1'] == player && @grid['B2'] == player && @grid['A3'] == player
      return true
    end
    return false
@@ -172,15 +172,15 @@ elsif player_move == 'C1' || player_move == 'C2' || player_move == 'C3'
 
 def is_move_already_played?(player_move)
  #is this space already taken by another player?
- if $grid[player_move] == " "
+ if @grid[player_move] == " "
  return false
  end
  return true
 end
 
  def set_player_move(player_move, player)
- if $grid[player_move] == " "
-     $grid[player_move] = player
+ if @grid[player_move] == " "
+     @grid[player_move] = player
    else
      puts "There is already a play in square #{player_move}. #{player} loses a turn."
    end
@@ -250,7 +250,7 @@ end
 
   def generate_dumb_computer_move
     #play the first available space
-    $grid.each do |key, value|
+    @grid.each do |key, value|
       if value == " "
         return key
       end
@@ -262,7 +262,7 @@ def tic_tac_toe
   greeting
   get_game_mode
   print_rules
-  if $game_mode == 1
+  if @game_mode == 1
     play_game_mode_1
   else
     play_game_mode_2
