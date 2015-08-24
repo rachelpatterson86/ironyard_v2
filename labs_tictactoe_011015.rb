@@ -4,12 +4,12 @@
 @turns = 9
 
 def get_board                                 # output
-  grid_h =  "---+---+---\n"                   #    1 | 2 | 3
+  grid_h =  "---+---+---\n"
+  i = 0                                       #    1 | 2 | 3
   @spaces.each_slice(3) do |row|              #   ---+---+---
-    puts ' ' + row.join(' | ')                #    4 | 5 | 6
-    if row != @spaces.last(3)                 #   ---+---+---
-      puts grid_h                             #    7 | 8 | 9
-    end
+    i += 1                                    #    4 | 5 | 6
+    puts ' ' + row.join(' | ')                #   ---+---+---
+    puts grid_h unless i == 3                      #    7 | 8 | 9
   end
   puts "\n"
 end
@@ -137,6 +137,7 @@ end
     end
     comp_move = avail_comp_move.sample
     set_player_move(comp_move, player)
+    set_win_arr(comp_move, player)
   end
 
 #TODO play game mode 3 = minimax algorithm...
