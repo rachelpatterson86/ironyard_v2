@@ -9,7 +9,7 @@ def get_board                                 # output
   @spaces.each_slice(3) do |row|              #   ---+---+---
     i += 1                                    #    4 | 5 | 6
     puts ' ' + row.join(' | ')                #   ---+---+---
-    puts grid_h unless i == 3                      #    7 | 8 | 9
+    puts grid_h unless i == 3                 #    7 | 8 | 9
   end
   puts "\n"
 end
@@ -37,7 +37,7 @@ def validation(validate,input,validation_type,player=nil)
 end
 
 def validation_end(validation_type,input,player=nil)
-  case validation_type #separate into different function....
+  case validation_type
   when 'game_mode'
     puts "You've selected #{@game_options[input]} mode! Let's get started."
     @game_mode = input
@@ -91,9 +91,7 @@ end
   def set_win_arr(player_move, player)
     @win.each do |combo|
       combo.each do |space|
-        if space == player_move
-          combo[combo.index(space)] = player
-        end
+        combo[combo.index(space)] = player if space == player_move
       end
     end
   end
