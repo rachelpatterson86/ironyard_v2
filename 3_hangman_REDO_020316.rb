@@ -117,6 +117,17 @@ def hangman(words)
     end
   end
   game_over(turn_count, answer) # TODO: Do I need an argument? -- YES
+  play_again?(words)
+end
+
+def play_again?(words)
+  puts "Would you like to play again? Y/N"
+  input = gets.chomp.upcase
+  input == "Y" ? play_game(words) : (puts "Ok. Next time.")
+end
+
+def play_game(words)
+  hangman(words)
 end
 
 hangman(words)
