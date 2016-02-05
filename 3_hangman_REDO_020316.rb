@@ -68,6 +68,12 @@ def prompt_player(guessed,turns)
   # TODO: get user input / show some status
 end
 
+#added this fuction b/c it's easy to fat finger input. Function runs only
+#if any of the following are true:
+#a: input is not a letter
+#b: input length is more than 1 character long
+#c: if the input has already been guessed
+
 def validate_input(input,guessed)
   until /[a-z]/ === input && input.chars.length == 1 && !guessed.include?(input)
     if /[^a-z]/ === input
