@@ -34,13 +34,27 @@ end
 
 def greeting
   # TODO: tell the player about hangman
+  puts "Welcome to Hangman! The Bestest game ever!!"
 end
 
-def game_over
+def game_over(turns,ans)
+  puts "Thanks for playing."
+  if turns.zero?
+    puts "Sorry loser."
+  else
+    puts "You got it. You win!"
+  end
+  puts "The word was #{ans}"
   # TODO: tell the player what the word was and if they won or lost
 end
 
-def prompt_player
+def prompt_player(guessed)
+  puts "Guess a letter."
+  input = gets.chomp
+  until input ~= /[^a-zA-z]/ || input != guessed
+    puts "That's not valid silly. Try again."
+    input = gets.chomp
+  end
   # TODO: get user input / show some status
 end
 
@@ -48,15 +62,15 @@ def hangman(words)
   turn_count = ARGV.empty? ? 6 : ARGV[0].to_i
   guessed = Set.new
   answer = words.sample
-  greeting # TODO: Do I need an argument?
+  greeting # TODO: Do I need an argument? -- NOPE
   until finished?(turn_count, guessed, answer)
-    guess = prompt_player
+    guess = prompt_player(guessed)
     guessed.add(guess)
     unless answer.include?(guess)
       turn_count -= 1
     end
   end
-  game_over # TODO: Do I need an argument?
+  game_over(turn_count,answer) # TODO: Do I need an argument?
 end
 
 hangman(words)
