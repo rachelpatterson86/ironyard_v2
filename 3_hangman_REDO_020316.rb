@@ -36,16 +36,25 @@ def complete_word?(guesses, answer)
   answer.chars.all? { |l| guesses.include?(l) }
 end
 
+def display_logo
+  File.open('ascii_hangman_logo.txt','r') do |f1|
+    while line = f1.gets
+      puts line
+    end
+  end
+end
+
 def greeting
   # TODO: tell the player about hangman
   puts "Welcome to Hangman. You know what to do!"
 end
 
 def print_init_word_spaces(ans)
+  puts "\n"
   (ans.length).times do
     print "_ "
   end
-  puts ""
+  puts "\n\n"
 end
 
 def game_over(turns,ans)
@@ -99,18 +108,37 @@ def display_partial_word(guesses,answer)
     end
     print " "
   end
-  puts ""
+  puts "\n\n"
+end
+
+#TODO: fix the output
+def display_ascii_status(turns)
+  line = 0
+  original_turns = 6
+  (original_turns - turns).times do
+    line += 7
+  end
+  start_point = line
+  end_point = line + 7
+  File.open('ascii_hangman_status.txt','r') do |f|
+    while line.between?(start_point,end_point)
+      puts f.gets
+      line +=1
+    end
+  end
 end
 
 def hangman(words)
   turn_count = ARGV.empty? ? 6 : ARGV[0].to_i
   guessed = Set.new
   answer = words.sample
+  display_logo
   greeting # TODO: Do I need an argument? -- NOPE
   print_init_word_spaces(answer)
   until finished?(turn_count, guessed, answer)
     guess = prompt_player(guessed,turn_count)
     guessed.add(guess)
+    display_ascii_status(turn_count)
     display_partial_word(guessed,answer)
     unless answer.include?(guess)
       turn_count -= 1
@@ -130,4 +158,4 @@ def play_game(words)
   hangman(words)
 end
 
-hangman(words)
+play_game(words)
