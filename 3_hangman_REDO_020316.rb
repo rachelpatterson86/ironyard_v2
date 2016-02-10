@@ -108,7 +108,7 @@ def display_partial_word(guesses,answer)
       print '_'
     end
     print " "
-  end3
+  end
   puts "\n\n"
 end
 
