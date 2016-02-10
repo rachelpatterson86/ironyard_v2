@@ -59,6 +59,7 @@ end
 
 def game_over(turns,ans)
   if turns.zero?
+    display_ascii_status(turns)
     puts "Sorry loser."
   else
     puts "You got it. You win!"
@@ -116,13 +117,14 @@ def display_ascii_status(turns)
   line = 0
   original_turns = 6
   (original_turns - turns).times do
-    line += 7
+    line += 8
   end
   start_point = line
   end_point = line + 7
-  File.open('ascii_hangman_status.txt','r') do |f|
-    while line.between?(start_point,end_point)
-      puts f.gets
+  File.open('ascii_hangman_status.txt','r') do |f1|
+    while line.between?(start_point,end_point)#line = f1.gets
+      #puts f1.gets
+      puts IO.readlines(f1)[line]
       line +=1
     end
   end
