@@ -11,22 +11,7 @@
 # BONUS: Prompt the player to play another game and continue until they quit.
 # BONUS: ASCII art everywhere! ASCII logo, ASCII hangman status!
 
-## BEWARE THE SEMICOLON!
-
-#require 'pry'
 require 'set'
-
-words = ['angus',
-         'onomatopeia',
-         'mississippi',
-         'cookies',
-         'terminal',
-         'illness',
-         'communist',
-         'dictator',
-         'capitalist',
-         'marxist',
-         'darwinism']
 
 def finished?(turns, guesses, answer)
   turns.zero? || complete_word?(guesses, answer)
@@ -45,7 +30,6 @@ def display_logo
 end
 
 def greeting
-  # TODO: tell the player about hangman
   puts "Welcome to Hangman. You know what to do!"
 end
 
@@ -65,7 +49,6 @@ def game_over(turns,ans)
     puts "You got it. You win!"
   end
   puts "The word was #{ans}. Thanks for playing."
-  # TODO: tell the player what the word was and if they won or lost
 end
 
 def prompt_player(guessed,turns)
@@ -75,7 +58,6 @@ def prompt_player(guessed,turns)
     input = validate_input(input,guessed)
   end
   input
-  # TODO: get user input / show some status
 end
 
 #added this fuction b/c it's easy to fat finger input. Function runs only
@@ -87,9 +69,9 @@ end
 def validate_input(input,guessed)
   until /[a-z]/ === input && input.chars.length == 1 && !guessed.include?(input)
     if /[^a-z]/ === input
-        puts "#{input} is not a valid letter."
+      puts "#{input} is not a valid letter."
     elsif input.chars.length != 1
-        puts "#{input.chars.length} #{input} is not a valid length. One character is only needed."
+      puts "'#{input}' is too long. One character is only needed."
     end
     if guessed.include?(input)
       puts "#{input} is has already been guessed."
@@ -112,7 +94,6 @@ def display_partial_word(guesses,answer)
   puts "\n\n"
 end
 
-#TODO: fix the output
 def display_ascii_status(turns)
   line = 0
   original_turns = 6
@@ -122,20 +103,27 @@ def display_ascii_status(turns)
   start_point = line
   end_point = line + 7
   File.open('ascii_hangman_status.txt','r') do |f1|
-    while line.between?(start_point,end_point)#line = f1.gets
-      #puts f1.gets
+    while line.between?(start_point,end_point)
       puts IO.readlines(f1)[line]
       line +=1
     end
   end
 end
 
-def hangman(words)
+def word
+  words = []
+  File.open('english-dict.txt','r').each do |f|
+    words << f.delete!("\n")
+  end
+  words.sample
+end
+
+def hangman
   turn_count = ARGV.empty? ? 6 : ARGV[0].to_i
   guessed = Set.new
-  answer = words.sample
+  answer = word
   display_logo
-  greeting # TODO: Do I need an argument? -- NOPE
+  greeting
   print_init_word_spaces(answer)
   until finished?(turn_count, guessed, answer)
     guess = prompt_player(guessed,turn_count)
@@ -146,18 +134,18 @@ def hangman(words)
       turn_count -= 1
     end
   end
-  game_over(turn_count, answer) # TODO: Do I need an argument? -- YES
-  play_again?(words)
+  game_over(turn_count, answer)
+  play_again?
 end
 
-def play_again?(words)
+def play_again?
   puts "Would you like to play again? Y/N"
   input = gets.chomp.upcase
-  input == "Y" ? play_game(words) : (puts "Ok. Next time.")
+  input == "Y" ? play_game : (puts "Ok. Next time.")
 end
 
-def play_game(words)
-  hangman(words)
+def play_game
+  hangman
 end
 
-play_game(words)
+play_game
