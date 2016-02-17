@@ -43,9 +43,8 @@ toy.find(3)
 toy.reverse
 
 ## Logarithmic Time O(lg n)
-## TODO: why .sort ?
-## Optimal Sort Time - O(n log n)
-## ruby .sort
+
+## ruby .sort ie binary tree b/c every time the code looks through a set, it halves the amount.
 
 ## Quadratic Time O(n^2) -- pretty slow but can still do some real world stuff
   ## This can extend to 3x loops [O(n^3)], 4x loops [O(n^4)] etc...
@@ -61,4 +60,9 @@ arr.each do |x|
 end
 
 ## Exponential Time O(x^n)
-## TODO: find example?
+## recursion.
+
+def Fibonacci(number)
+  number if (number <= 1)
+  return Fibonacci(number - 2) + Fibonacci(number - 1)
+end
