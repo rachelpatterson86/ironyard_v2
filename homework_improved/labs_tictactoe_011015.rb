@@ -97,36 +97,20 @@ end
   end
 
 def player_win?
-  @win.any? {|w| w.uniq.length == 1}
+  @win.any? {|w| w.uniq.length == 1} if @turns <5
 end
 
 def gameboard_full?
   @turns.eql?(0)
 end
 
-def game_over?(player)
-  if @turns < 5 && player_win?
-    puts "#{player} wins! Thanks for playing."
-    return true
-  elsif gameboard_full?
-    puts "Board is full and it's a tie! Thanks for playing."
-    return true
-  end
+def game_over?
+  #puts "game over: player is #{player}"
+  player_win? || gameboard_full?
+    #puts "#{player} wins! Thanks for playing."
 end
 
-def play_game_mode_1(player)
-  get_player_move(player)
-end
-
-def play_game_mode_2(player)
-  if player == @player1
-    get_player_move(player)
-  else
-    generate_dumb_computer_move(player)
-  end
-end
-
-  def generate_dumb_computer_move(player)      #play random value from @spaces
+  def generate_dumb_computer_move(player) #play random value from @spaces
     avail_comp_move = []
     @spaces.each do |i|
       if i.class == Fixnum
@@ -137,6 +121,15 @@ end
     set_player_move(comp_move, player)
     set_win_arr(comp_move, player)
   end
+
+def turns(player)
+  @turns -= 1
+  return get_player_move(player) if @game_mode == 1 || player == @player1
+  if player == @player2
+    generate_dumb_computer_move(player) if @game_mode == 2
+    #generate_smart_computer_move(player) if game_mode == 3
+  end
+end
 
 #TODO play game mode 3 = minimax algorithm...
 # def play_game_mode_3(player)
@@ -162,16 +155,9 @@ def tic_tac_toe
   get_game_mode
   player = @player1
   @turns -= 1
-  until game_over?(player) do
-    @turns -= 1
+  until game_over? do
     player == @player1 ? player = @player2 : player = @player1
-      if @game_mode == 1
-        play_game_mode_1(player)
-      elsif @game_mode == 2
-        play_game_mode_2(player)
-      else
-        play_game_mode_3(player)
-      end
+    turns(player)
     get_board
   end
 end
