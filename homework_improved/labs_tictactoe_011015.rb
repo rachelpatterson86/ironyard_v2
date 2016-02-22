@@ -18,10 +18,10 @@ def validation(validate,input,validation_type,player=nil)
   invalid_msg = " is not an option. Please select "
   until validate
     case validation_type
-    when 'game_mode'
-      puts "#{input}" + invalid_msg + "1, 2, or 3."
-      input = gets.chomp.to_i
-      validate = @game_options.has_key?(input)
+    # when 'game_mode'
+    #   puts "#{input}" + invalid_msg + "1, 2, or 3."
+    #   input = gets.chomp.to_i
+    #   validate = @game_options.has_key?(input)
     when 'xo'
       puts "#{input}" + invalid_msg + "'X' or 'O'."
       input = gets.chomp
@@ -52,22 +52,26 @@ def validation_end(validation_type,input,player=nil)
   end
 end
 
+def welcome
+  puts "Welcome to Tic Tac Toe: The all American game! \nWhat Tic Tac Toe game would you like to play? Select 1, 2 or 3"
+end
+
 def get_game_mode
-  puts "Welcome to Tic Tac Toe: The all American game! \n What Tic Tac Toe game would you like to play? Select 1, 2 or 3"
   @game_options.each do |opt, msg|
     puts "#{opt} is #{msg}"
   end
-  user_input = gets.chomp.to_i
-  validate = @game_options.has_key?(user_input)
-  validation(validate,user_input,"game_mode")
-  select_xo
+  input = gets.chomp
+  until @game_options.has_key?(input.to_i)
+    puts "#{input} is not an option. Please select 1, 2, or 3."
+    input = gets.chomp
+  end
 end
 
 def select_xo
   puts "But first... do you want to be 'X' or 'O'?"
-  user_input = gets.chomp
-  validate = user_input =~ /^[xo]$/i
-  validation(validate,user_input,"xo")
+  input = gets.chomp
+  validate = input =~ /^[xo]$/i
+  validation(validate,input,"xo")
   puts "Select any number on the board for where you would like to go! \n"
   get_board
   get_player_move(@player1)
@@ -152,7 +156,9 @@ end
 #   end
 
 def tic_tac_toe
+  welcome
   get_game_mode
+  select_xo
   player = @player1
   @turns -= 1
   until game_over? do
