@@ -142,6 +142,19 @@ end
 #     set_player_move(comp_move, player)
 #   end
 
+def play_again?
+  puts "would you like to play again? Select 'Y' or 'N'"
+  input = gets.chomp
+  until input =~ /^[yn]$/i
+    puts"#{input} is not an option. Please select 'Y' or 'N'."
+    input = gets.chomp
+  end
+  if input.upcase == "Y"
+    tic_tac_toe
+  else
+    puts "Ok. Bye."
+end
+
 def game_setup
   welcome
   get_game_mode
@@ -157,6 +170,7 @@ def tic_tac_toe
     turns(player)
     get_board
   end
+  play_again?
 end
 
 tic_tac_toe
