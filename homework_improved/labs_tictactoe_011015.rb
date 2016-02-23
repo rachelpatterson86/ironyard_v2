@@ -14,44 +14,6 @@ def get_board                                 # output
   puts "\n"
 end
 
-def validation(validate,input,validation_type,player=nil)
-  invalid_msg = " is not an option. Please select "
-  until validate
-    case validation_type
-    # when 'game_mode'
-    #   puts "#{input}" + invalid_msg + "1, 2, or 3."
-    #   input = gets.chomp.to_i
-    #   validate = @game_options.has_key?(input)
-    when 'xo'
-      puts "#{input}" + invalid_msg + "'X' or 'O'."
-      input = gets.chomp
-      validate = input =~ /^[xo]$/i
-    when 'game_move'
-      puts "#{input}" + invalid_msg + "an available number on the board"
-      input = gets.chomp.to_i
-      validate = is_valid_move?(input)
-      puts "#{validate}"
-    end
-  end
-  validation_end(validation_type,input,player)
-end
-
-def validation_end(validation_type,input,player=nil)
-  case validation_type
-  when 'game_mode'
-    puts "You've selected #{@game_options[input]} mode! Let's get started."
-    @game_mode = input
-  when 'xo'
-    @player1 = input.upcase!
-    @player1 == "X" ? @player2 = "O" : @player2 = "X"
-    puts "You are '#{@player1}'. Your oppenent is '#{@player2}'."
-  when 'game_move'
-    set_player_move(input, player)
-    set_win_arr(input, player)
-    get_board
-  end
-end
-
 def welcome
   puts "Welcome to Tic Tac Toe: The all American game! \nWhat Tic Tac Toe game would you like to play? Select 1, 2 or 3"
 end
@@ -65,23 +27,43 @@ def get_game_mode
     puts "#{input} is not an option. Please select 1, 2, or 3."
     input = gets.chomp
   end
+  assign_game_mode(input)
+end
+
+def assign_game_mode(input)
+  puts "You've selected #{@game_options[input]} mode! Let's get started.\n\n"
+  @game_mode = input.to_i
 end
 
 def select_xo
   puts "But first... do you want to be 'X' or 'O'?"
   input = gets.chomp
-  validate = input =~ /^[xo]$/i
-  validation(validate,input,"xo")
-  puts "Select any number on the board for where you would like to go! \n"
+  until input =~ /^[xo]$/i
+    puts"#{input} is not an option. Please select 'X' or 'O'."
+    input = gets.chomp
+  end
+  assign_player_xo(input)
+end
+
+  def assign_player_xo(input)
+    @player1 = input.upcase!
+    @player1 == "X" ? @player2 = "O" : @player2 = "X"
+    puts "You are '#{@player1}'. Your oppenent is '#{@player2}'.\n\n"
+  end
+
+def init_game_board
+  puts "Select any number on the board for where you would like to go! \n\n"
   get_board
-  get_player_move(@player1)
 end
 
 def get_player_move(player)
   player_move = gets.chomp.to_i
-  validate = is_valid_move?(player_move)
-#  puts "#{validate} from get player move"
-  validation(validate,player_move,'game_move',player)
+  until is_valid_move?(player_move)
+    puts "#{player_move} is not a valid option. Please select an available number on the board"
+    player_move = gets.chomp.to_i
+  end
+  set_player_move(player_move, player)
+  set_win_arr(player_move, player)
 end
 
   def is_valid_move?(player_move)
@@ -159,8 +141,8 @@ def tic_tac_toe
   welcome
   get_game_mode
   select_xo
-  player = @player1
-  @turns -= 1
+  player = ""
+  init_game_board
   until game_over? do
     player == @player1 ? player = @player2 : player = @player1
     turns(player)
