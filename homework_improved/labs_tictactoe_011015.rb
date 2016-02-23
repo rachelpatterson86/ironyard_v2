@@ -175,3 +175,12 @@ def tic_tac_toe
 end
 
 tic_tac_toe
+
+# TODO:
+# minimax -- @game_mode = 3
+# reset @spaces and set_win_arr if a player decides to play again.
+# refactor play_again and select_xo perhaps...
+# save game and come back?
+# high score board... top ten?
+# rails app version?
+# set private methods?
