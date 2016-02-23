@@ -153,6 +153,7 @@ def play_again?
     tic_tac_toe
   else
     puts "Ok. Bye."
+  end
 end
 
 def game_setup
