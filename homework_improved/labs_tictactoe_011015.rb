@@ -83,7 +83,7 @@ end
   end
 
 def player_win?
-  @win.any? {|w| w.uniq.length == 1} if @turns <5
+  @win.any? {|w| w.uniq.length == 1}
 end
 
 def gameboard_full?
@@ -92,7 +92,7 @@ end
 
 def game_over?
   #puts "game over: player is #{player}"
-  player_win? || gameboard_full?
+  (player_win? || gameboard_full?) if @turns < 5
     #puts "#{player} wins! Thanks for playing."
 end
 
@@ -137,12 +137,17 @@ end
 #     set_player_move(comp_move, player)
 #   end
 
-def tic_tac_toe
+def game_setup
   welcome
   get_game_mode
   select_xo
-  player = ""
   init_game_board
+end
+
+def tic_tac_toe
+  game_setup
+  player = ""
+  puts "player is #{player}"
   until game_over? do
     player == @player1 ? player = @player2 : player = @player1
     turns(player)
