@@ -90,18 +90,23 @@ def gameboard_full?
   @turns.eql?(0)
 end
 
-def game_over?
-  #puts "game over: player is #{player}"
-  (player_win? || gameboard_full?) if @turns < 5
-    #puts "#{player} wins! Thanks for playing."
+def game_over?(player)
+  if @turns < 5
+    if player_win?
+      puts "#{player} wins! Thanks for playing."
+      return true
+    end
+    if gameboard_full?
+      puts "It's a tie! No one wins. :( "
+      return true
+    end
+  end
 end
 
   def generate_dumb_computer_move(player) #play random value from @spaces
     avail_comp_move = []
     @spaces.each do |i|
-      if i.class == Fixnum
-        avail_comp_move << i
-      end
+      avail_comp_move << i if i.class == Fixnum
     end
     comp_move = avail_comp_move.sample
     set_player_move(comp_move, player)
@@ -147,8 +152,7 @@ end
 def tic_tac_toe
   game_setup
   player = ""
-  puts "player is #{player}"
-  until game_over? do
+  until game_over?(player) do
     player == @player1 ? player = @player2 : player = @player1
     turns(player)
     get_board
