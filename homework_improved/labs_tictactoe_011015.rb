@@ -1,12 +1,12 @@
 @game_options = {1 => "Human v. Human", 2 => "Human v. Computer(Easy)", 3 => "Human v. Computer(Hard)"}
-@spaces = 1.upto(9).to_a
-@win = [[1,2,3],[4,5,6],[7,8,9],[1,4,7],[2,5,8],[3,6,9],[1,5,9],[3,5,7]]
-@turns = 9
+spaces = 1.upto(9).to_a
+win = [[1,2,3],[4,5,6],[7,8,9],[1,4,7],[2,5,8],[3,6,9],[1,5,9],[3,5,7]]
+turns = 9
 
-def get_board                                 # output
+def get_board(spaces)                         # output
   grid_h =  "---+---+---\n"
   i = 0                                       #    1 | 2 | 3
-  @spaces.each_slice(3) do |row|              #   ---+---+---
+  spaces.each_slice(3) do |row|              #   ---+---+---
     i += 1                                    #    4 | 5 | 6
     puts ' ' + row.join(' | ')                #   ---+---+---
     puts grid_h unless i == 3                 #    7 | 8 | 9
@@ -51,86 +51,84 @@ end
     puts "You are '#{@player1}'. Your oppenent is '#{@player2}'.\n\n"
   end
 
-def init_game_board
+def init_game_board(spaces)
   puts "Select any number on the board for where you would like to go! \n\n"
-  get_board
+  get_board(spaces)
 end
 
-def get_player_move(player)
+def get_player_move(player,spaces,win)
   player_move = gets.chomp.to_i
-  until is_valid_move?(player_move)
+  until is_valid_move?(player_move,spaces)
     puts "#{player_move} is not a valid option. Please select an available number on the board"
     player_move = gets.chomp.to_i
   end
-  set_player_move(player_move, player)
-  set_win_arr(player_move, player)
+  set_player_move(player_move, player, spaces)
+  set_win_arr(player_move, player,win)
 end
 
-  def is_valid_move?(player_move)
-    @spaces.any? {|s| s == player_move}
+  def is_valid_move?(player_move, spaces)
+    spaces.any? {|s| s == player_move}
   end
 
-  def set_player_move(player_move, player)
-    @spaces[player_move - 1] = player
+  def set_player_move(player_move, player, spaces)
+    spaces[player_move - 1] = player
   end
 
-  def set_win_arr(player_move, player)
-    @win.each do |combo|
+  def set_win_arr(player_move, player, win)
+    win.each do |combo|
       combo.each do |space|
         combo[combo.index(space)] = player if space == player_move
       end
     end
+
   end
-
-def player_win?
-  @win.any? {|w| w.uniq.length == 1}
+def player_win?(win)
+  win.any? {|w| w.uniq.length == 1}
 end
 
-def gameboard_full?
-  @turns.eql?(0)
+def gameboard_full?(turns)
+  turns.eql?(0)
 end
 
-def game_over?(player)
-  if @turns < 5
-    if player_win?
+def game_over?(player, win, turns)
+  if turns < 5
+    puts "turns = #{turns}"
+    if player_win?(win)
       puts "#{player} wins! Thanks for playing."
       return true
     end
-    if gameboard_full?
+    if gameboard_full?(turns)
       puts "It's a tie! No one wins. :( "
       return true
     end
   end
 end
 
-  def generate_dumb_computer_move(player) #play random value from @spaces
+#play random value from @spaces
+  def generate_dumb_computer_move(player, spaces, win)
     avail_comp_move = []
-    @spaces.each do |i|
+    spaces.each do |i|
       avail_comp_move << i if i.class == Fixnum
     end
     comp_move = avail_comp_move.sample
-    set_player_move(comp_move, player)
-    set_win_arr(comp_move, player)
+    set_player_move(comp_move, player, spaces)
+    set_win_arr(comp_move, player, win)
   end
 
-def turns(player)
-  @turns -= 1
-  return get_player_move(player) if @game_mode == 1 || player == @player1
+def switch_turn(player, turns,spaces,win)
+  # turns -= 1
+  puts "turns = #{turns}"
+  if player == @player1 || @game_mode == 1
+    return get_player_move(player,spaces,win)
+  end
   if player == @player2
     generate_dumb_computer_move(player) if @game_mode == 2
-    #generate_smart_computer_move(player) if game_mode == 3
+    generate_smart_computer_move(player) if @game_mode == 3
   end
 end
 
 #TODO play game mode 3 = minimax algorithm...
-# def play_game_mode_3(player)
-#   if player == @player1
-#     get_player_move(player)
-#   else
-#     generate_smart_computer_move
-#   end
-# end
-#
+
 #   def generate_smart_computer_move(player)      #play random value from @spaces
 #     avail_comp_move = []
 #     @spaces.each do |i|
@@ -142,7 +140,7 @@ end
 #     set_player_move(comp_move, player)
 #   end
 
-def play_again?
+def play_again?(spaces, win, turns)
   puts "would you like to play again? Select 'Y' or 'N'"
   input = gets.chomp
   until input =~ /^[yn]$/i
@@ -150,37 +148,38 @@ def play_again?
     input = gets.chomp
   end
   if input.upcase == "Y"
-    tic_tac_toe
+    turns = 9
+    tic_tac_toe(spaces, win, turns)
   else
     puts "Ok. Bye."
   end
 end
 
-def game_setup
+def game_setup(spaces)
   welcome
   get_game_mode
   select_xo
-  init_game_board
+  init_game_board(spaces)
 end
 
-def tic_tac_toe
-  game_setup
+def tic_tac_toe(spaces, win, turns)
+  game_setup(spaces)
   player = ""
-  until game_over?(player) do
+  until game_over?(player, win, turns) do
     player == @player1 ? player = @player2 : player = @player1
-    turns(player)
-    get_board
+    switch_turn(player, turns,spaces, win)
+    turns -= 1
+    get_board(spaces)
   end
-  play_again?
+  play_again?(spaces, win, turns)
 end
 
-tic_tac_toe
+tic_tac_toe(spaces, win, turns)
 
 # TODO:
 # minimax -- @game_mode = 3
 # reset @spaces and set_win_arr if a player decides to play again.
 # refactor play_again and select_xo perhaps...
-# save game and come back?
 # high score board... top ten?
 # rails app version?
 # set private methods?
