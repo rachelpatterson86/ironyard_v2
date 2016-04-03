@@ -1,7 +1,4 @@
 @game_options = {1 => "Human v. Human", 2 => "Human v. Computer(Easy)", 3 => "Human v. Computer(Hard)"}
-spaces = 1.upto(9).to_a
-win = [[1,2,3],[4,5,6],[7,8,9],[1,4,7],[2,5,8],[3,6,9],[1,5,9],[3,5,7]]
-turns = 9
 
 def get_board(spaces)                         # output
   grid_h =  "---+---+---\n"
@@ -149,7 +146,7 @@ def play_again?(spaces, win, turns)
   end
   if input.upcase == "Y"
     turns = 9
-    tic_tac_toe(spaces, win, turns)
+    tic_tac_toe
   else
     puts "Ok. Bye."
   end
@@ -162,7 +159,11 @@ def game_setup(spaces)
   init_game_board(spaces)
 end
 
-def tic_tac_toe(spaces, win, turns)
+def tic_tac_toe
+  spaces = 1.upto(9).to_a
+  win = [[1,2,3],[4,5,6],[7,8,9],[1,4,7],[2,5,8],[3,6,9],[1,5,9],[3,5,7]]
+  turns = 9
+
   game_setup(spaces)
   player = ""
   until game_over?(player, win, turns) do
@@ -174,11 +175,11 @@ def tic_tac_toe(spaces, win, turns)
   play_again?(spaces, win, turns)
 end
 
-tic_tac_toe(spaces, win, turns)
+tic_tac_toe
 
 # TODO:
 # minimax -- @game_mode = 3
-# reset @spaces and set_win_arr if a player decides to play again.
+# class methods for TTT
 # refactor play_again and select_xo perhaps...
 # high score board... top ten?
 # rails app version?
