@@ -150,38 +150,36 @@ def score(player,turns)
   end
   if gameboard_full?(turns)
     score = {@player1: draw, @player2: draw}
-    scoreboard(score[@player1]) if @game_mode != 1
+    scoreboard_count(score[@player1]) if @game_mode != 1
   end
 end
 
 #only if player plays against the Computer
 #Win-Loss-Draw scoreboard - displays the count of the numbers of times a player wins, looses and draws.
 #score param will an array.
-def scoreboard(score)
+def scoreboard_count(score)
   score_count = {w: 0, l: 0, d: 0}
-  score_count.each do |k,v|
+  score_count.each_key do |k|
     score_count[k] += 1 if k == score[0]
   end
   score_count
 end
-  # case score
-  #   when 1
-  #     score_count[:w] += 1
-  #   when 0
-  #     score_count[:d] += 1
-  #   when -1
-  #     score_count[:l] += 1
-  # end
 
+def generate_scoreboard(score_count)
+  scoreboard = ""
   header = " W | L | D "
   horz = "-----------\n"
-
-  #puts ' ' + w + ' | '
+    count = score_count.each do |k,v|
+            print  " #{score_count[k]} "
+    end
 end
 
- W | L | D
------------
- 2 | 1 | 3
+#assigning val from loop...
+
+#output
+#  W | L | D
+# -----------
+#  2  1  3
 
 def play_again?(spaces, win, turns)
   puts "would you like to play again? Select 'Y' or 'N'"
