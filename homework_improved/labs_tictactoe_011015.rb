@@ -89,7 +89,6 @@ end
 
 def game_over?(player, win, turns)
   if turns < 5
-    puts "turns = #{turns}"
     if player_win?(win)
       puts "#{player} wins! Thanks for playing."
       return true
@@ -113,14 +112,12 @@ end
   end
 
 def switch_turn(player, turns,spaces,win)
-  # turns -= 1
-  puts "turns = #{turns}"
   if player == @player1 || @game_mode == 1
     return get_player_move(player,spaces,win)
   end
   if player == @player2
-    generate_dumb_computer_move(player) if @game_mode == 2
-    generate_smart_computer_move(player) if @game_mode == 3
+    generate_dumb_computer_move(player, spaces, win) if @game_mode == 2
+    #generate_smart_computer_move(player) if @game_mode == 3
   end
 end
 
@@ -136,6 +133,55 @@ end
 #     comp_move = avail_comp_move.sample
 #     set_player_move(comp_move, player)
 #   end
+
+#if there is a winner, winner gets 1 point. Loser get -1 point.
+def score(player,turns)
+  win = [:w, 1]
+  draw = [:d, 0]
+  loss = [:l,-1]
+
+  score = {}
+  if player_win?(win)
+    if player = @player1
+      score = {@player1: win, @player2: loss}
+    else
+      score = {@player1: loss, @player2: win}
+    end
+  end
+  if gameboard_full?(turns)
+    score = {@player1: draw, @player2: draw}
+    scoreboard(score[@player1]) if @game_mode != 1
+  end
+end
+
+#only if player plays against the Computer
+#Win-Loss-Draw scoreboard - displays the count of the numbers of times a player wins, looses and draws.
+#score param will an array.
+def scoreboard(score)
+  score_count = {w: 0, l: 0, d: 0}
+  score_count.each do |k,v|
+    score_count[k] += 1 if k == score[0]
+  end
+  score_count
+end
+  # case score
+  #   when 1
+  #     score_count[:w] += 1
+  #   when 0
+  #     score_count[:d] += 1
+  #   when -1
+  #     score_count[:l] += 1
+  # end
+
+  header = " W | L | D "
+  horz = "-----------\n"
+
+  #puts ' ' + w + ' | '
+end
+
+ W | L | D
+-----------
+ 2 | 1 | 3
 
 def play_again?(spaces, win, turns)
   puts "would you like to play again? Select 'Y' or 'N'"
