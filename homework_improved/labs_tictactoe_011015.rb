@@ -166,12 +166,13 @@ def scoreboard_count(score)
 end
 
 def generate_scoreboard(score_count)
+  score_count = {w: 0, l: 0, d: 0}
   scoreboard = ""
-  header = " W | L | D "
+  header = " W | L | D \n"
   horz = "-----------\n"
-    count = score_count.each do |k,v|
-            print  " #{score_count[k]} "
-    end
+  score_count.each do |k,v|
+    print " #{score_count[k]} "
+  end
 end
 
 #assigning val from loop...
